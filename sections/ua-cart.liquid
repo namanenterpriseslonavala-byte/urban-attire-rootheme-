@@ -1,0 +1,50 @@
+{%- if cart.item_count == 0 -%}
+<section class='state'>
+  <h1>Your bag is empty</h1>
+  <p>Nothing here yet. Start with the new arrivals, or pick up where the family left off.</p>
+  <div class='bs'><a class='btn solid' href='{{ routes.collections_url }}/men'>Shop Men</a><a class='btn dark' href='{{ routes.collections_url }}/kids'>Shop Kids</a></div>
+</section>
+{%- else -%}
+<div class='cart-h'><h1>Your bag</h1><div class='sub'>{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</div></div>
+{%- form 'cart', cart -%}
+<div class='cartwrap'>
+  <div>
+    <div class='citems'>
+      {%- for item in cart.items -%}
+      <div class='crow'>
+        <a class='im' href='{{ item.url }}'>{%- if item.image -%}<img src='{{ item.image | image_url: width: 300 }}' alt='{{ item.product.title | escape }}' loading='lazy' width='110' height='136'>{%- endif -%}</a>
+        <div>
+          <div class='nm'><a href='{{ item.url }}'>{{ item.product.title }}</a></div>
+          {%- unless item.product.has_only_default_variant -%}<div class='meta'>{{ item.variant.title }}</div>{%- endunless -%}
+          <div class='ctrl'>
+            <div class='qty'><button type='button' data-step='-1' data-autosubmit aria-label='Decrease quantity of {{ item.product.title | escape }}'>–</button><input type='number' name='updates[]' value='{{ item.quantity }}' min='0' aria-label='Quantity of {{ item.product.title | escape }}'><button type='button' data-step='1' data-autosubmit aria-label='Increase quantity of {{ item.product.title | escape }}'>+</button></div>
+            <a class='rm' href='{{ item.url_to_remove }}'>Remove</a>
+          </div>
+        </div>
+        <div class='tnum' style='text-align:right'>{{ item.final_line_price | money_without_trailing_zeros }}{%- if item.original_line_price > item.final_line_price -%}<div><s style='color:var(--muted)'>{{ item.original_line_price | money_without_trailing_zeros }}</s></div>{%- endif -%}</div>
+      </div>
+      {%- endfor -%}
+    </div>
+    <noscript><button type='submit' name='update' class='btn dark' style='margin-top:22px'>Update bag</button></noscript>
+    <p style='margin-top:26px'><a class='lk' href='{{ routes.collections_url }}/men'>← Continue shopping</a></p>
+  </div>
+
+  <aside class='summary' aria-label='Order summary'>
+    <h3>Order summary</h3>
+    <div class='sl'><span>Subtotal</span><span class='tnum'>{{ cart.items_subtotal_price | money_without_trailing_zeros }}</span></div>
+    {%- for d in cart.cart_level_discount_applications -%}<div class='sl'><span>{{ d.title }}</span><span class='tnum'>−{{ d.total_allocated_amount | money_without_trailing_zeros }}</span></div>{%- endfor -%}
+    <div class='sl'><span>Shipping</span><span>{% if cart.total_price >= 249900 %}Free{% else %}Calculated at checkout{% endif %}</span></div>
+    <div class='sl tot'><span>Total</span><span class='tnum'>{{ cart.total_price | money_without_trailing_zeros }}</span></div>
+    <label class='lbl' for='ua-note' style='margin-top:18px'>Order note (optional)</label>
+    <textarea id='ua-note' name='note' class='vsel' rows='2'>{{ cart.note }}</textarea>
+    <button type='submit' name='checkout' class='btn solid block'>Checkout securely</button>
+    <div class='trustl'><span>Secure Shopify checkout · UPI, cards, COD</span><span>Free shipping over ₹2,499</span><span>Easy 15-day returns</span></div>
+    <div class='pay' style='justify-content:center'><b>UPI</b><b>Visa</b><b>Mastercard</b><b>RuPay</b><b>COD</b></div>
+  </aside>
+</div>
+{%- endform -%}
+{%- endif -%}
+
+{% schema %}
+{"name":"Cart — Gallery","settings":[]}
+{% endschema %}

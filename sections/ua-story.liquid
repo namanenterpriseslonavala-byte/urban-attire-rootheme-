@@ -1,0 +1,17 @@
+{%- assign s = section.settings -%}
+<section class='story'>
+  {%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}
+  <p>{{ s.text }}</p>
+  {%- if section.blocks.size > 0 -%}
+    <div class='mt'>
+      {%- for b in section.blocks -%}<div {{ b.shopify_attributes }}><div class='n'>{{ b.settings.value }}</div><div class='l'>{{ b.settings.label }}</div></div>{%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{"name":"Story","settings":[
+{"type":"text","id":"eyebrow","label":"Small heading","default":"Our story"},
+{"type":"textarea","id":"text","label":"Text","default":"Three stores in Lonavala, one standard — well-made everyday clothing for men and the kids who copy them."}
+],"blocks":[{"type":"stat","name":"Fact","settings":[{"type":"text","id":"value","label":"Value","default":"3"},{"type":"text","id":"label","label":"Label","default":"Stores in Lonavala"}]}],"max_blocks":4,"presets":[{"name":"Story","blocks":[{"type":"stat","settings":{"value":"3","label":"Stores in Lonavala"}},{"type":"stat","settings":{"value":"Family","label":"Run & owned"}},{"type":"stat","settings":{"value":"India","label":"Now shipping"}}]}]}
+{% endschema %}

@@ -1,0 +1,39 @@
+{%- assign s = section.settings -%}
+<section class='hero h-{{ s.height }} a-{{ s.align }}' style='--ov:{{ s.overlay | divided_by: 100.0 }}'>
+  <div class='bg ph'>
+    {%- if s.image -%}
+      <picture>
+        {%- if s.mobile_image -%}<source media='(max-width: 760px)' srcset='{{ s.mobile_image | image_url: width: 1000 }}'>{%- endif -%}
+        {{ s.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '800, 1200, 1800, 2400', alt: s.image.alt }}
+      </picture>
+    {%- else -%}
+      <div class='mark'>{% render 'ua-mark' %}</div>
+    {%- endif -%}
+  </div>
+  <div class='in'>
+    {%- if s.eyebrow != blank -%}<div class='ey'>{{ s.eyebrow }}</div>{%- endif -%}
+    {%- if section.index == 1 -%}<h1>{{ s.heading }}</h1>{%- else -%}<h2>{{ s.heading }}</h2>{%- endif -%}
+    {%- if s.text != blank -%}<p class='sub'>{{ s.text }}</p>{%- endif -%}
+    <div class='bs'>
+      {%- if s.btn1_label != blank -%}<a class='btn light solid' href='{{ s.btn1_link | default: routes.all_products_collection_url }}'>{{ s.btn1_label }}</a>{%- endif -%}
+      {%- if s.btn2_label != blank -%}<a class='btn light' href='{{ s.btn2_link | default: routes.all_products_collection_url }}'>{{ s.btn2_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{"name":"Hero banner","settings":[
+{"type":"image_picker","id":"image","label":"Image"},
+{"type":"image_picker","id":"mobile_image","label":"Mobile image (optional)"},
+{"type":"text","id":"eyebrow","label":"Small heading","default":"Autumn 2026"},
+{"type":"text","id":"heading","label":"Heading","default":"Considered everyday wear."},
+{"type":"textarea","id":"text","label":"Text (optional)"},
+{"type":"text","id":"btn1_label","label":"Button 1 label","default":"Shop Men"},
+{"type":"url","id":"btn1_link","label":"Button 1 link"},
+{"type":"text","id":"btn2_label","label":"Button 2 label","default":"Shop Kids"},
+{"type":"url","id":"btn2_link","label":"Button 2 link"},
+{"type":"select","id":"height","label":"Height","options":[{"value":"full","label":"Full screen"},{"value":"large","label":"Large"},{"value":"medium","label":"Medium"}],"default":"full"},
+{"type":"select","id":"align","label":"Text position","options":[{"value":"left","label":"Bottom left"},{"value":"center","label":"Centre"}],"default":"left"},
+{"type":"range","id":"overlay","label":"Image darkening","min":0,"max":80,"step":5,"unit":"%","default":45}
+],"presets":[{"name":"Hero banner"}]}
+{% endschema %}

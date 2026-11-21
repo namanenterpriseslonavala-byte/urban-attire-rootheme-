@@ -1,0 +1,30 @@
+{%- assign s = section.settings -%}
+<section class='sec pt-{{ s.pt }} pb-{{ s.pb }}'>
+  {%- if s.heading != blank or s.eyebrow != blank -%}
+    <div class='sh'><div>{%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}<h2>{{ s.heading }}</h2></div></div>
+  {%- endif -%}
+  <div class='pgrid' style='--c:{{ s.columns }}'>
+    {%- for b in section.blocks -%}
+      {%- assign t = b.settings -%}
+      <a class='pcard t-{{ t.tone }}' href='{{ t.link | default: routes.all_products_collection_url }}' {{ b.shopify_attributes }}>
+        {%- if t.image -%}{{ t.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(max-width: 1000px) 100vw, 50vw', alt: '' }}{%- else -%}<div class='ph{% if t.tone == 'light' %} l{% endif %}'></div>{%- endif -%}
+        <div class='pc-in'>
+          {%- if t.label != blank -%}<span class='o-badge'>{{ t.label }}</span>{%- endif -%}
+          <h3>{{ t.heading }}</h3>
+          {%- if t.text != blank -%}<p>{{ t.text }}</p>{%- endif -%}
+          {%- if t.link_label != blank -%}<span class='lk'>{{ t.link_label }}</span>{%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{"name":"Offer cards","settings":[
+{"type":"text","id":"eyebrow","label":"Small heading","default":"This week"},
+{"type":"text","id":"heading","label":"Heading","default":"Offers in store and online"},
+{"type":"range","id":"columns","label":"Cards per row","min":1,"max":3,"step":1,"default":2},
+{"type":"select","id":"pt","label":"Top spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"},
+{"type":"select","id":"pb","label":"Bottom spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"}
+],"blocks":[{"type":"card","name":"Offer card","settings":[{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"label","label":"Badge","default":"Up to 30% off"},{"type":"text","id":"heading","label":"Heading","default":"Linen shirts"},{"type":"textarea","id":"text","label":"Text"},{"type":"text","id":"link_label","label":"Link label","default":"Shop now →"},{"type":"url","id":"link","label":"Link"},{"type":"select","id":"tone","label":"Text colour","options":[{"value":"dark","label":"Light text (for dark images)"},{"value":"light","label":"Dark text (for light images)"}],"default":"dark"}]}],"max_blocks":6,"presets":[{"name":"Offer cards","blocks":[{"type":"card","settings":{"label":"Up to 30% off","heading":"Linen shirts"}},{"type":"card","settings":{"label":"Buy 2, save ₹300","heading":"Kids tees","tone":"light"}}]}]}
+{% endschema %}

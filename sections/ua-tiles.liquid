@@ -1,0 +1,27 @@
+{%- assign s = section.settings -%}
+<section class='sec pt-{{ s.pt }} pb-{{ s.pb }}'>
+  {%- if s.heading != blank or s.eyebrow != blank -%}
+    <div class='sh'><div>{%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}<h2>{{ s.heading }}</h2></div>{%- if s.link_label != blank -%}<a class='lk' href='{{ s.link | default: routes.collections_url }}'>{{ s.link_label }}</a>{%- endif -%}</div>
+  {%- endif -%}
+  <div class='tiles' style='--c:{{ s.columns }}'>
+    {%- for b in section.blocks -%}
+      {%- assign t = b.settings -%}
+      <a class='tile{% if t.tone == 'light' %} lt{% endif %}' href='{{ t.link | default: routes.all_products_collection_url }}' {{ b.shopify_attributes }}>
+        {%- if t.image -%}{{ t.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(max-width: 1000px) 100vw, 33vw', alt: '' }}{%- else -%}<div class='ph{% if t.tone == 'light' %} l{% endif %}'></div>{%- endif -%}
+        <div class='cap'><h3>{{ t.title }}</h3>{%- if t.subtitle != blank -%}<span class='go'>{{ t.subtitle }}</span>{%- endif -%}</div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{"name":"Collection tiles","settings":[
+{"type":"text","id":"eyebrow","label":"Small heading","default":"Shop by category"},
+{"type":"text","id":"heading","label":"Heading","default":"The collections"},
+{"type":"text","id":"link_label","label":"Link label","default":"View all"},
+{"type":"url","id":"link","label":"Link"},
+{"type":"range","id":"columns","label":"Tiles per row","min":2,"max":4,"step":1,"default":3},
+{"type":"select","id":"pt","label":"Top spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"},
+{"type":"select","id":"pb","label":"Bottom spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"}
+],"blocks":[{"type":"tile","name":"Tile","settings":[{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"title","label":"Title","default":"Shirts"},{"type":"text","id":"subtitle","label":"Subtitle","default":"Men"},{"type":"url","id":"link","label":"Link"},{"type":"select","id":"tone","label":"Text colour","options":[{"value":"dark","label":"Light text (for dark images)"},{"value":"light","label":"Dark text (for light images)"}],"default":"dark"}]}],"max_blocks":8,"presets":[{"name":"Collection tiles","blocks":[{"type":"tile","settings":{"title":"Shirts","subtitle":"Men"}},{"type":"tile","settings":{"title":"T-Shirts","subtitle":"Men","tone":"light"}},{"type":"tile","settings":{"title":"Kidswear","subtitle":"Boys & Girls"}}]}]}
+{% endschema %}

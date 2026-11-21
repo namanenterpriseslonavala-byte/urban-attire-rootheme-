@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang='{{ request.locale.iso_code }}'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='theme-color' content='#0d0d0c'>
+  <link rel='canonical' href='{{ canonical_url }}'>
+  <title>{{ page_title }}{% if current_tags %} – {{ current_tags | join: ', ' }}{% endif %}{% unless page_title contains shop.name %} · {{ shop.name }}{% endunless %}</title>
+  {%- if page_description -%}<meta name='description' content='{{ page_description | escape }}'>{%- endif -%}
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap'>
+  {{ 'urban-attire.css' | asset_url | stylesheet_tag }}
+  {{ 'ua-sections.css' | asset_url | stylesheet_tag }}
+  <script>window.UA_EDIT={domain:{{ shop.permanent_domain | json }},theme:{{ theme.id | default: 196539089028 | json }},path:{{ request.path | json }},design:{{ request.design_mode | json }}{% if template.name == 'product' %},product:{id:{{ product.id | json }},title:{{ product.title | json }}}{% endif %}{% if template.name == 'collection' %},collection:{id:{{ collection.id | json }},title:{{ collection.title | json }}}{% endif %}};</script>
+  <script src='{{ 'urban-attire.js' | asset_url }}' defer></script>
+  <script src='{{ 'ua-edit.js' | asset_url }}' defer></script>
+  {{ content_for_header }}
+</head>
+<body class='template-{{ template.name }}'>
+  <a class='vh skip' href='#MainContent'>Skip to content</a>
+  {% section 'ua-announcement' %}
+
+  <header class='ua-hd'>
+    <div class='s l'>
+      <button type='button' class='ua-nav' data-open-menu aria-label='Open menu'><span class='ua-bars'><i></i><i></i><i></i></span><span class='dk'>Menu</span></button>
+      {%- for link in linklists['main-menu'].links -%}
+        <a class='ua-nav dk' href='{{ link.url }}'{% if link.active %} aria-current='page'{% endif %}>{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
+    <a class='ua-logo' href='{{ routes.root_url }}' aria-label='{{ shop.name | escape }} — home'>{% render 'ua-logo' %}</a>
+    <div class='s r'>
+      <a class='ua-nav dk' href='{{ routes.search_url }}'>Search</a>
+      <a class='ua-nav dk' href='{{ routes.account_url }}'>Account</a>
+      <a class='ua-nav' href='{{ routes.cart_url }}' data-open-cart>Bag (<span data-cart-count>{{ cart.item_count }}</span>)</a>
+    </div>
+  </header>
+
+  <div class='ua-menu' data-ua-menu aria-hidden='true' role='dialog' aria-label='Menu'>
+    <div class='top'><span class='bl'>{{ shop.name }}</span><button type='button' class='ua-nav' data-close-menu>Close ✕</button></div>
+    <div class='bd'>
+      <div class='col'>
+        <h4>Men</h4>
+        <ul>
+          <li><a href='{{ routes.collections_url }}/men'>All Men</a></li>
+          <li><a href='{{ routes.collections_url }}/men/shirts'>Shirts</a></li>
+          <li><a href='{{ routes.collections_url }}/men/tees'>T-Shirts</a></li>
+          <li><a href='{{ routes.collections_url }}/men/polos'>Polos</a></li>
+          <li><a href='{{ routes.collections_url }}/new-arrivals'>New Arrivals</a></li>
+        </ul>
+      </div>
+      <div class='col'>
+        <h4>Kids</h4>
+        <ul>
+          <li><a href='{{ routes.collections_url }}/kids'>All Kids</a></li>
+          <li><a href='{{ routes.collections_url }}/kids/boys'>Boys</a></li>
+          <li><a href='{{ routes.collections_url }}/kids/girls'>Girls</a></li>
+          <li><a href='{{ routes.collections_url }}/kids/sets'>Sets</a></li>
+        </ul>
+      </div>
+      <div class='col feat'>
+        <div>
+          <div class='e'>Autumn 2026</div>
+          <h3>The Weekly Edit</h3>
+          <a class='lk' href='{{ routes.collections_url }}/new-arrivals'>Shop the edit →</a>
+        </div>
+      </div>
+    </div>
+    <div class='ft'><a href='{{ routes.search_url }}'>Search</a><a href='{{ routes.account_url }}'>Account</a><a href='{{ routes.cart_url }}'>Bag</a><span>Lonavala — 3 Stores</span></div>
+  </div>
+
+  <main id='MainContent' role='main' tabindex='-1'>
+    {{ content_for_layout }}
+  </main>
+
+  <footer class='ua-ft'>
+    <div class='row'>
+      <div>
+        <a class='ua-logo' href='{{ routes.root_url }}' aria-label='{{ shop.name | escape }}'>{% render 'ua-logo' %}</a>
+        <p>Considered menswear and kidswear, made and sold in Lonavala. Now shipping across India.</p>
+      </div>
+      <div><h5>Shop</h5><ul>{%- for link in linklists.footer.links -%}<li><a href='{{ link.url }}'>{{ link.title }}</a></li>{%- endfor -%}</ul></div>
+      <div><h5>Help</h5><ul><li><a href='{{ routes.cart_url }}'>Bag</a></li><li><a href='{{ routes.account_url }}'>Account &amp; orders</a></li><li><a href='{{ routes.search_url }}'>Search</a></li></ul></div>
+      <div><h5>Visit</h5><ul><li>Three stores in Lonavala</li><li>Open daily</li></ul></div>
+    </div>
+    <div class='base'><span>© {{ 'now' | date: '%Y' }} {{ shop.name }}</span><span>Lonavala, Maharashtra · India</span><span>Secure checkout · UPI · Cards · COD</span></div>
+  </footer>
+
+  <div class='ua-scrim' data-ua-scrim></div>
+  <aside class='ua-drawer' data-ua-drawer data-free='249900' aria-hidden='true' role='dialog' aria-label='Your bag'>
+    <div class='dh'><span>Your bag</span><button type='button' class='x' data-close-cart aria-label='Close bag'>✕</button></div>
+    <div data-cart-items></div>
+    <div data-cart-go>
+      <div class='prog'><div data-cart-progress></div><div class='bar'><i data-cart-bar></i></div></div>
+      <div class='sum'><span class='s'>Subtotal</span><span class='v tnum' data-cart-subtotal>{{ cart.total_price | money_without_trailing_zeros }}</span></div>
+      <div class='note'>Shipping and taxes calculated at checkout.</div>
+      <form action='{{ routes.cart_url }}' method='post'><button type='submit' name='checkout' class='btn solid block'>Checkout</button></form>
+      <a class='btn dark block' href='{{ routes.cart_url }}'>View bag</a>
+    </div>
+    <button type='button' class='cont' data-close-cart>Continue shopping</button>
+    <div class='pay'><b>UPI</b><b>Visa</b><b>Mastercard</b><b>RuPay</b><b>COD</b></div>
+  </aside>
+</body>
+</html>

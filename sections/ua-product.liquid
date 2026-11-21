@@ -1,0 +1,79 @@
+{%- assign current = product.selected_or_first_available_variant -%}
+<nav class='crumb' aria-label='Breadcrumb'><a href='{{ routes.root_url }}'>Home</a> &nbsp;/&nbsp; {%- if collection -%}<a href='{{ collection.url }}'>{{ collection.title }}</a>{%- elsif product.collections.first -%}<a href='{{ product.collections.first.url }}'>{{ product.collections.first.title }}</a>{%- endif -%} &nbsp;/&nbsp; {{ product.title }}</nav>
+
+<div class='pdp' style='margin-top:20px'>
+  <div class='gal'>
+    <div class='thumbs'>
+      {%- if product.media.size > 1 -%}
+        {%- for m in product.media limit: 6 -%}
+          {%- if m.media_type == 'image' -%}
+            <button type='button' data-thumb data-full='{{ m | image_url: width: 1400 }}' data-alt='{{ m.alt | escape }}' aria-current='{% if forloop.first %}true{% else %}false{% endif %}' aria-label='Show image {{ forloop.index }}'><img src='{{ m | image_url: width: 180 }}' alt='' loading='lazy' width='82' height='101'></button>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    <div class='main'>
+      {%- if product.featured_media -%}<img data-main-img src='{{ product.featured_media | image_url: width: 1400 }}' alt='{{ product.featured_media.alt | default: product.title | escape }}' width='1400' height='{{ 1400 | divided_by: product.featured_media.aspect_ratio | round }}'>{%- endif -%}
+    </div>
+  </div>
+
+  <div class='info'>
+    {%- if product.type != blank -%}<div class='ey2'>{{ product.type }}</div>{%- endif -%}
+    <h1>{{ product.title }}</h1>
+    <p class='price tnum'>{{ current.price | money_without_trailing_zeros }}{%- if current.compare_at_price > current.price -%}<s>{{ current.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</p>
+    {%- if product.description != blank -%}<p class='desc'>{{ product.description | strip_html | truncatewords: 28 }}</p>{%- endif -%}
+
+    {%- form 'product', product, id: 'ua-product-form' -%}
+      {%- if product.has_only_default_variant -%}
+        <input type='hidden' name='id' value='{{ current.id }}'>
+      {%- elsif product.options.size == 1 -%}
+        <fieldset class='pills'>
+          <legend class='lbl' style='width:100%'><span>{{ product.options.first }}</span> <a href='#size-fit'>Size guide</a></legend>
+          <div class='opts'>
+            {%- for v in product.variants -%}
+              <input class='vh' type='radio' name='id' id='v-{{ v.id }}' value='{{ v.id }}'{% if v.id == current.id %} checked{% endif %}{% unless v.available %} disabled{% endunless %}><label for='v-{{ v.id }}'{% unless v.available %} class='off'{% endunless %}>{{ v.title }}</label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- else -%}
+        <label class='lbl' for='ua-variant'>Options</label>
+        <select id='ua-variant' class='vsel' name='id'>
+          {%- for v in product.variants -%}<option value='{{ v.id }}'{% if v.id == current.id %} selected{% endif %}{% unless v.available %} disabled{% endunless %}>{{ v.title }} — {{ v.price | money_without_trailing_zeros }}</option>{%- endfor -%}
+        </select>
+      {%- endif -%}
+
+      <div class='lbl'>Quantity</div>
+      <div class='qty'><button type='button' data-step='-1' aria-label='Decrease quantity'>–</button><input type='number' name='quantity' value='1' min='1' aria-label='Quantity'><button type='button' data-step='1' aria-label='Increase quantity'>+</button></div>
+
+      <div class='buy'>
+        <button type='submit' class='btn solid'{% unless product.available %} disabled{% endunless %}>{%- if product.available -%}Add to bag — {{ current.price | money_without_trailing_zeros }}{%- else -%}Sold out{%- endif -%}</button>
+      </div>
+      <p class='err' data-add-error role='alert'></p>
+    {%- endform -%}
+
+    <div class='facts'><span>Free shipping over ₹2,499 · Dispatched in 1–2 working days</span><span>Cash on Delivery available · Easy 15-day returns</span></div>
+    <div class='pay'><span>We accept</span><b>UPI</b><b>Visa</b><b>Mastercard</b><b>RuPay</b><b>COD</b></div>
+
+    <details class='acc' open><summary>Details</summary><div class='bd rte'>{{ product.description | default: 'Details coming soon.' }}</div></details>
+    <details class='acc' id='size-fit'><summary>Size &amp; Fit</summary><div class='bd'>Regular fit. If you are between sizes, size up for a relaxed look. Kids sizes run true to age.</div></details>
+    <details class='acc'><summary>Shipping &amp; Returns</summary><div class='bd'>Dispatched in 1–2 working days from Lonavala. Free shipping over ₹2,499. Easy 15-day returns and exchanges.</div></details>
+    <details class='acc'><summary>Care</summary><div class='bd'>Machine wash cold with like colours. Do not bleach. Tumble dry low. Warm iron if needed.</div></details>
+  </div>
+</div>
+
+{%- assign rel = product.collections.first -%}
+{%- if rel and rel.products_count > 1 -%}
+<section class='sec'>
+  <div class='sh'><div><div class='ey2'>More to love</div><h2>Complete the look</h2></div><a class='lk' href='{{ rel.url }}'>Shop {{ rel.title }}</a></div>
+  <div class='grid g4'>
+    {%- assign shown = 0 -%}
+    {%- for p in rel.products -%}
+      {%- if p.id != product.id and shown < 4 -%}{% render 'ua-card', product: p %}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{"name":"Product — Gallery","settings":[]}
+{% endschema %}

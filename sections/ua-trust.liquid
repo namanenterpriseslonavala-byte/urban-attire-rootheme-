@@ -1,0 +1,7 @@
+<div class='trust'>
+  {%- for b in section.blocks -%}<span {{ b.shopify_attributes }}>{{ b.settings.text }}</span>{%- endfor -%}
+</div>
+
+{% schema %}
+{"name":"Trust strip","blocks":[{"type":"item","name":"Item","settings":[{"type":"text","id":"text","label":"Text","default":"Free shipping over ₹2,499"}]}],"max_blocks":8,"presets":[{"name":"Trust strip","blocks":[{"type":"item","settings":{"text":"Made in Lonavala"}},{"type":"item","settings":{"text":"Free shipping over ₹2,499"}},{"type":"item","settings":{"text":"15-day returns"}},{"type":"item","settings":{"text":"COD available"}}]}]}
+{% endschema %}

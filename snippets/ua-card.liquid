@@ -1,0 +1,11 @@
+<a class='card' href='{{ product.url }}' data-edit='product' data-edit-id='{{ product.id }}' data-edit-label='Product: {{ product.title | escape }} (title, price, sizes, photos)'>
+  <div class='im'>
+    {%- if product.available == false -%}<span class='flag'>Sold out</span>{%- elsif product.tags contains 'new' -%}<span class='flag'>New</span>{%- endif -%}
+    {%- if product.featured_image -%}
+      <img src='{{ product.featured_image | image_url: width: 720 }}' srcset='{{ product.featured_image | image_url: width: 360 }} 360w, {{ product.featured_image | image_url: width: 720 }} 720w' sizes='(max-width: 760px) 50vw, 25vw' alt='{{ product.featured_image.alt | default: product.title | escape }}' loading='lazy' width='720' height='{{ 720 | divided_by: product.featured_image.aspect_ratio | round }}'>
+    {%- else -%}<span class='t'>Photo coming soon</span>{%- endif -%}
+  </div>
+  <div class='nm'>{{ product.title }}</div>
+  {%- if product.type != blank -%}<div class='mt'>{{ product.type }}</div>{%- endif -%}
+  <div class='pr tnum'>{%- if product.price_varies -%}From {% endif -%}{{ product.price | money_without_trailing_zeros }}{%- if product.compare_at_price > product.price -%}<s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</div>
+</a>

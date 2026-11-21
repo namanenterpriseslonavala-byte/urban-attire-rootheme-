@@ -1,0 +1,18 @@
+<section class='chero'><h1>Collections</h1></section>
+<div class='sec' style='padding-top:48px'>
+  <div class='grid'>
+    {%- for c in collections -%}
+      {%- unless c.handle == 'frontpage' -%}
+        <a class='card' href='{{ c.url }}'>
+          <div class='im'>{%- if c.featured_image -%}<img src='{{ c.featured_image | image_url: width: 800 }}' alt='' loading='lazy'>{%- elsif c.products.first.featured_image -%}<img src='{{ c.products.first.featured_image | image_url: width: 800 }}' alt='' loading='lazy'>{%- endif -%}</div>
+          <div class='nm'>{{ c.title }}</div>
+          <div class='mt'>{{ c.products_count }} styles</div>
+        </a>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{"name":"Collections — Gallery","settings":[]}
+{% endschema %}

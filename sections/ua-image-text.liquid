@@ -1,0 +1,23 @@
+{%- assign s = section.settings -%}
+<section class='edi{% if s.image_side == 'right' %} rev{% endif %}{% if s.tone == 'dark' %} dk{% endif %}'>
+  <div class='vis ph'>{%- if s.image -%}{{ s.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 1000px) 100vw, 50vw', alt: s.image.alt }}{%- endif -%}</div>
+  <div class='tx'>
+    {%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}
+    <h2>{{ s.heading }}</h2>
+    {%- if s.text != blank -%}<div class='rte'>{{ s.text }}</div>{%- endif -%}
+    {%- if s.btn_label != blank -%}<a class='btn dark' href='{{ s.btn_link | default: routes.all_products_collection_url }}'>{{ s.btn_label }}</a>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{"name":"Image with text","settings":[
+{"type":"image_picker","id":"image","label":"Image"},
+{"type":"text","id":"eyebrow","label":"Small heading","default":"The Weekly Edit"},
+{"type":"text","id":"heading","label":"Heading","default":"New in, every week."},
+{"type":"richtext","id":"text","label":"Text","default":"<p>A tight, rotating selection of what we are wearing now — soft-washed shirts, heavyweight tees, and kidswear built to be lived in.</p>"},
+{"type":"text","id":"btn_label","label":"Button label","default":"Shop the edit"},
+{"type":"url","id":"btn_link","label":"Button link"},
+{"type":"select","id":"image_side","label":"Image position","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}],"default":"left"},
+{"type":"select","id":"tone","label":"Text panel","options":[{"value":"light","label":"Light"},{"value":"dark","label":"Dark"}],"default":"light"}
+],"presets":[{"name":"Image with text"}]}
+{% endschema %}

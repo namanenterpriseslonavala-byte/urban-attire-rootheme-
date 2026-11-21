@@ -1,0 +1,50 @@
+{%- liquid
+  assign s = section.settings
+  assign c = s.collection
+  if c == blank
+    assign c = collections['new-arrivals']
+  endif
+  assign manual = false
+  if s.source == 'products' and s.products != blank
+    assign manual = true
+  endif
+-%}
+<section class='sec pt-{{ s.pt }} pb-{{ s.pb }}'>
+  <div class='sh'>
+    <div>{%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}<h2>{{ s.heading | default: c.title }}</h2></div>
+    {%- if s.link_label != blank -%}
+      {%- if manual and s.link != blank -%}
+        <a class='lk' href='{{ s.link }}'>{{ s.link_label }}</a>
+      {%- elsif manual == false and c.url != blank -%}
+        <a class='lk' href='{{ c.url }}' data-edit='collection' data-edit-id='{{ c.id }}' data-edit-label='Collection: {{ c.title | escape }} (which products show here)'>{{ s.link_label }}</a>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+  {%- if manual -%}
+    <div class='{% if s.layout == 'grid' %}grid g4{% else %}rail{% endif %}'>
+      {%- for product in s.products limit: s.limit -%}{% render 'ua-card', product: product %}{%- endfor -%}
+    </div>
+  {%- elsif c.products_count > 0 -%}
+    <div class='{% if s.layout == 'grid' %}grid g4{% else %}rail{% endif %}'>
+      {%- for product in c.products limit: s.limit -%}{% render 'ua-card', product: product %}{%- endfor -%}
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class='editor-note'>Pick a collection, or switch to “Products I pick” and choose products.</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{"name":"Product row","settings":[
+{"type":"text","id":"eyebrow","label":"Small heading","default":"Just landed"},
+{"type":"text","id":"heading","label":"Heading","default":"New arrivals"},
+{"type":"select","id":"source","label":"Show products from","options":[{"value":"collection","label":"A collection (updates automatically)"},{"value":"products","label":"Products I pick"}],"default":"collection"},
+{"type":"collection","id":"collection","label":"Collection","info":"Tip: make a Sale or Festive collection and pick it here during an offer."},
+{"type":"product_list","id":"products","label":"Products I pick","limit":12,"info":"Used when ‘Products I pick’ is selected. Drag to reorder."},
+{"type":"url","id":"link","label":"Link for ‘Products I pick’ (optional)"},
+{"type":"range","id":"limit","label":"Products to show","min":2,"max":12,"step":1,"default":8},
+{"type":"select","id":"layout","label":"Layout","options":[{"value":"rail","label":"Scrolling row"},{"value":"grid","label":"Grid"}],"default":"rail"},
+{"type":"text","id":"link_label","label":"Link label","default":"Shop all"},
+{"type":"select","id":"pt","label":"Top spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"},
+{"type":"select","id":"pb","label":"Bottom spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"}
+],"presets":[{"name":"Product row"}]}
+{% endschema %}

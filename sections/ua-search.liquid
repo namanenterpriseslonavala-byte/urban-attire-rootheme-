@@ -1,0 +1,34 @@
+<section class='chero'>
+  <h1>Search</h1>
+  <form action='{{ routes.search_url }}' method='get' role='search' class='sbar'>
+    <label class='vh' for='ua-q'>Search products</label>
+    <input id='ua-q' type='search' name='q' value='{{ search.terms | escape }}' placeholder='What are you looking for?' autocomplete='off'>
+    <input type='hidden' name='type' value='product'>
+    <button class='btn dark' type='submit'>Search</button>
+  </form>
+  <p style='margin-top:18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)'>Popular: <a class='lk' href='{{ routes.search_url }}?q=shirt&amp;type=product'>Shirts</a> &nbsp; <a class='lk' href='{{ routes.search_url }}?q=tee&amp;type=product'>Tees</a> &nbsp; <a class='lk' href='{{ routes.collections_url }}/kids'>Kids</a> &nbsp; <a class='lk' href='{{ routes.collections_url }}/new-arrivals'>New in</a></p>
+</section>
+
+{%- if search.performed -%}
+<div class='tool'><span>Results for “{{ search.terms | escape }}”</span><span>{{ search.results_count }} found</span></div>
+<div class='sec' style='padding-top:40px'>
+  {%- paginate search.results by 12 -%}
+    {%- if search.results_count > 0 -%}
+      <div class='grid g4'>
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}{% render 'ua-card', product: item %}{%- else -%}<a class='card' href='{{ item.url }}'><div class='nm'>{{ item.title }}</div></a>{%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <nav class='pag' aria-label='Pagination'>{%- if paginate.previous -%}<a href='{{ paginate.previous.url }}'>← Previous</a>{%- endif -%}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{%- if paginate.next -%}<a href='{{ paginate.next.url }}'>Next →</a>{%- endif -%}</nav>
+      {%- endif -%}
+    {%- else -%}
+      <div class='empty'><p>No results for “{{ search.terms | escape }}”. Try “shirt”, “tee” or “kids”.</p></div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+{%- endif -%}
+
+{% schema %}
+{"name":"Search — Gallery","settings":[]}
+{% endschema %}

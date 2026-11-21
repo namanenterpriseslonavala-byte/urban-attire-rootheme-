@@ -1,0 +1,118 @@
+{%- liquid
+  assign men = section.settings.men_collection
+  if men == blank
+    assign men = collections['men']
+  endif
+  assign kids = section.settings.kids_collection
+  if kids == blank
+    assign kids = collections['kids']
+  endif
+  assign feat = section.settings.featured_collection
+  if feat == blank
+    assign feat = collections['new-arrivals']
+  endif
+  assign men_url = men.url | default: routes.all_products_collection_url
+  assign kids_url = kids.url | default: routes.all_products_collection_url
+  assign feat_url = feat.url | default: routes.all_products_collection_url
+-%}
+
+<section class='hero'>
+  <div class='bg ph'>
+    {%- if section.settings.hero_image -%}
+      {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', sizes: '100vw', widths: '800, 1200, 1800, 2400', alt: '' }}
+    {%- else -%}
+      <div class='mark'>{% render 'ua-mark' %}</div>
+    {%- endif -%}
+  </div>
+  <div class='in'>
+    <div class='ey'>{{ section.settings.eyebrow }}</div>
+    <h1>{{ section.settings.heading }}</h1>
+    <div class='bs'>
+      <a class='btn light solid' href='{{ men_url }}'>Shop Men</a>
+      <a class='btn light' href='{{ kids_url }}'>Shop Kids</a>
+    </div>
+  </div>
+</section>
+
+<div class='trust'><span>Made in Lonavala</span><span>Honest pricing</span><span>Free shipping over ₹2,499</span><span>15-day returns</span><span>COD available</span></div>
+
+<section class='split' aria-label='Shop by department'>
+  <a class='tile' href='{{ men_url }}'>
+    {%- if section.settings.men_image -%}{{ section.settings.men_image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 760px) 100vw, 50vw', alt: '' }}{%- else -%}<div class='ph'></div>{%- endif -%}
+    <div class='cap'><h3>Men</h3><span class='go'>Shirts, tees &amp; polos →</span></div>
+  </a>
+  <a class='tile lt' href='{{ kids_url }}'>
+    {%- if section.settings.kids_image -%}{{ section.settings.kids_image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 760px) 100vw, 50vw', alt: '' }}{%- else -%}<div class='ph l'></div>{%- endif -%}
+    <div class='cap'><h3>Kids</h3><span class='go'>For the little ones →</span></div>
+  </a>
+</section>
+
+<section class='sec' style='padding-bottom:0'>
+  <div class='sh'><div><div class='ey2'>Shop by category</div><h2>The collections</h2></div><a class='lk' href='{{ routes.collections_url }}'>View all</a></div>
+  <div class='trio'>
+    <a class='tile' href='{{ routes.collections_url }}/men/shirts'><div class='ph'></div><div class='cap'><h3>Shirts</h3><span class='go'>Men</span></div></a>
+    <a class='tile lt' href='{{ routes.collections_url }}/men/tees'><div class='ph l'></div><div class='cap'><h3>T-Shirts</h3><span class='go'>Men</span></div></a>
+    <a class='tile' href='{{ kids_url }}'><div class='ph'></div><div class='cap'><h3>Kidswear</h3><span class='go'>Boys &amp; Girls</span></div></a>
+  </div>
+</section>
+
+{%- if feat.products_count > 0 -%}
+<section class='sec'>
+  <div class='sh'><div><div class='ey2'>Just landed</div><h2>New arrivals</h2></div><a class='lk' href='{{ feat_url }}'>Shop all new</a></div>
+  <div class='rail'>
+    {%- for product in feat.products limit: 8 -%}{% render 'ua-card', product: product %}{%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+<section class='edi'>
+  <div class='vis ph'>{%- if section.settings.edit_image -%}{{ section.settings.edit_image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 1000px) 100vw, 50vw', alt: '' }}{%- endif -%}</div>
+  <div class='tx'>
+    <div class='ey2'>The Weekly Edit</div>
+    <h2>{{ section.settings.edit_heading }}</h2>
+    <p>{{ section.settings.edit_text }}</p>
+    <a class='btn dark' href='{{ feat_url }}'>Shop the edit</a>
+  </div>
+</section>
+
+<section class='story'>
+  <div class='ey2'>Our story</div>
+  <p>{{ section.settings.story }}</p>
+  <div class='mt'>
+    <div><div class='n'>3</div><div class='l'>Stores in Lonavala</div></div>
+    <div><div class='n'>Family</div><div class='l'>Run &amp; owned</div></div>
+    <div><div class='n'>India</div><div class='l'>Now shipping</div></div>
+  </div>
+</section>
+
+<section class='news'>
+  <h2>Join the list</h2>
+  <p>Early access to new drops, in-store events in Lonavala, and the occasional member-only offer.</p>
+  {%- form 'customer', class: 'f', id: 'ua-newsletter' -%}
+    {%- if form.posted_successfully? -%}
+      <p class='msg' role='status'>Thank you — you’re on the list.</p>
+    {%- else -%}
+      <input type='hidden' name='contact[tags]' value='newsletter'>
+      <label class='vh' for='ua-news-email'>Email address</label>
+      <input id='ua-news-email' type='email' name='contact[email]' placeholder='Email address' autocomplete='email' required>
+      <button type='submit'>Subscribe</button>
+    {%- endif -%}
+  {%- endform -%}
+</section>
+
+{% schema %}
+{"name":"Home — Gallery","settings":[
+{"type":"text","id":"eyebrow","label":"Hero eyebrow","default":"Autumn 2026"},
+{"type":"text","id":"heading","label":"Hero heading","default":"Considered everyday wear."},
+{"type":"image_picker","id":"hero_image","label":"Hero image"},
+{"type":"collection","id":"men_collection","label":"Men collection"},
+{"type":"image_picker","id":"men_image","label":"Men tile image"},
+{"type":"collection","id":"kids_collection","label":"Kids collection"},
+{"type":"image_picker","id":"kids_image","label":"Kids tile image"},
+{"type":"collection","id":"featured_collection","label":"New arrivals collection"},
+{"type":"image_picker","id":"edit_image","label":"Weekly edit image"},
+{"type":"text","id":"edit_heading","label":"Weekly edit heading","default":"New in, every week."},
+{"type":"textarea","id":"edit_text","label":"Weekly edit text","default":"A tight, rotating selection of what we are wearing now — soft-washed shirts, heavyweight tees, and kidswear built to be lived in."},
+{"type":"textarea","id":"story","label":"Our story","default":"Three stores in Lonavala, one standard — well-made everyday clothing for men and the kids who copy them."}
+]}
+{% endschema %}

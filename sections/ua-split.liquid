@@ -1,0 +1,13 @@
+<section class='split cols-{{ section.blocks.size }} h-{{ section.settings.height }}' aria-label='Shop by department'>
+  {%- for b in section.blocks -%}
+    {%- assign t = b.settings -%}
+    <a class='tile{% if t.tone == 'light' %} lt{% endif %}' href='{{ t.link | default: routes.all_products_collection_url }}' {{ b.shopify_attributes }}>
+      {%- if t.image -%}{{ t.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 760px) 100vw, 50vw', alt: '' }}{%- else -%}<div class='ph{% if t.tone == 'light' %} l{% endif %}'></div>{%- endif -%}
+      <div class='cap'><h3>{{ t.title }}</h3>{%- if t.subtitle != blank -%}<span class='go'>{{ t.subtitle }}</span>{%- endif -%}</div>
+    </a>
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{"name":"Feature tiles","settings":[{"type":"select","id":"height","label":"Height","options":[{"value":"tall","label":"Tall"},{"value":"medium","label":"Medium"}],"default":"tall"}],"blocks":[{"type":"tile","name":"Tile","settings":[{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"title","label":"Title","default":"Men"},{"type":"text","id":"subtitle","label":"Subtitle","default":"Shop now →"},{"type":"url","id":"link","label":"Link"},{"type":"select","id":"tone","label":"Text colour","options":[{"value":"dark","label":"Light text (for dark images)"},{"value":"light","label":"Dark text (for light images)"}],"default":"dark"}]}],"max_blocks":3,"presets":[{"name":"Feature tiles","blocks":[{"type":"tile","settings":{"title":"Men","subtitle":"Shirts, tees & polos →"}},{"type":"tile","settings":{"title":"Kids","subtitle":"For the little ones →","tone":"light"}}]}]}
+{% endschema %}

@@ -1,0 +1,71 @@
+{%- assign skip = 'sample,new,men,kids' | split: ',' -%}
+<nav class='crumb' aria-label='Breadcrumb'><a href='{{ routes.root_url }}'>Home</a> &nbsp;/&nbsp; <a href='{{ collection.url }}'>{{ collection.title }}</a>{%- for t in current_tags -%} &nbsp;/&nbsp; {{ t | capitalize }}{%- endfor -%}</nav>
+<section class='chero'>
+  <h1>{{ collection.title }}{%- if current_tags -%} — {{ current_tags.first | capitalize }}{%- endif -%}</h1>
+  {%- if collection.description != blank -%}<div class='rte'>{{ collection.description }}</div>{%- endif -%}
+</section>
+
+<div class='tool'>
+  <span>{{ collection.products_count }} {% if collection.products_count == 1 %}style{% else %}styles{% endif %}</span>
+  {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+  <label><span class='vh'>Sort by</span>
+    <select data-sort>
+      {%- for o in collection.sort_options -%}<option value='{{ o.value }}'{% if o.value == sort_by %} selected{% endif %}>{{ o.name }}</option>{%- endfor -%}
+    </select>
+  </label>
+</div>
+
+{%- if current_tags -%}
+<div class='active'>
+  <span>Filtering by</span>
+  {%- for t in current_tags -%}<span class='pill'>{{ t | capitalize }} <a href='{{ collection.url }}' aria-label='Remove filter {{ t }}'>✕</a></span>{%- endfor -%}
+  <a class='lk' href='{{ collection.url }}'>Clear all</a>
+</div>
+{%- endif -%}
+
+<div class='cwrap'>
+  <aside class='filters' aria-label='Filters'>
+    <div>
+      <h4>Category</h4>
+      <ul>
+        <li><a href='{{ collection.url }}'{% unless current_tags %} class='on' aria-current='page'{% endunless %}>All</a></li>
+        {%- for tag in collection.all_tags -%}
+          {%- unless skip contains tag -%}
+            <li><a href='{{ collection.url }}/{{ tag | handleize }}'{% if current_tags contains tag %} class='on' aria-current='page'{% endif %}>{{ tag | capitalize }}</a></li>
+          {%- endunless -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <ul>
+        <li><a href='{{ routes.collections_url }}/men'>Men</a></li>
+        <li><a href='{{ routes.collections_url }}/kids'>Kids</a></li>
+        <li><a href='{{ routes.collections_url }}/new-arrivals'>New Arrivals</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <div>
+    {%- paginate collection.products by 12 -%}
+      {%- if collection.products.size > 0 -%}
+        <div class='grid'>
+          {%- for product in collection.products -%}{% render 'ua-card', product: product %}{%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class='pag' aria-label='Pagination'>
+            {%- if paginate.previous -%}<a href='{{ paginate.previous.url }}'>← Previous</a>{%- endif -%}
+            <span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {%- if paginate.next -%}<a href='{{ paginate.next.url }}'>Next →</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class='empty'><p>Nothing here yet.</p><a class='btn dark' href='{{ collection.url }}'>See everything in {{ collection.title }}</a></div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{"name":"Collection — Gallery","settings":[]}
+{% endschema %}

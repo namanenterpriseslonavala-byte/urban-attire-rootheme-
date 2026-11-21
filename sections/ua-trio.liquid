@@ -1,0 +1,60 @@
+{%- assign s = section.settings -%}
+<section class='sec trio-sec pt-{{ s.pt }} pb-{{ s.pb }}'>
+  {%- if s.heading != blank or s.eyebrow != blank -%}
+    <div class='sh'><div>{%- if s.eyebrow != blank -%}<div class='ey2'>{{ s.eyebrow }}</div>{%- endif -%}<h2>{{ s.heading }}</h2></div>{%- if s.link_label != blank -%}<a class='lk' href='{{ s.link | default: routes.all_products_collection_url }}'>{{ s.link_label }}</a>{%- endif -%}</div>
+  {%- endif -%}
+  <div class='trio'>
+    {%- for b in section.blocks -%}
+      {%- assign t = b.settings -%}
+      <a class='tcell{% if t.tone == 'light' %} lt{% endif %}' href='{{ t.link | default: routes.all_products_collection_url }}' {{ b.shopify_attributes }}>
+        <div class='media'>
+          {%- if t.video != blank -%}
+            {{ t.video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, controls: false, preload: 'none', image_size: '1400x' }}
+          {%- elsif t.video_url != blank -%}
+            <video autoplay muted loop playsinline preload='none' aria-hidden='true'{% if t.image %} poster='{{ t.image | image_url: width: 1200 }}'{% endif %}><source src='{{ t.video_url | escape }}' type='video/mp4'></video>
+          {%- elsif t.image -%}
+            {{ t.image | image_url: width: 1400 | image_tag: loading: 'lazy', sizes: '(max-width: 900px) 100vw, 33vw', alt: t.image.alt }}
+          {%- else -%}
+            <div class='ph{% if t.tone == 'light' %} l{% endif %}'></div>
+          {%- endif -%}
+          {%- if t.kind != blank -%}<span class='kind'>{{ t.kind }}</span>{%- endif -%}
+        </div>
+        <div class='cap'>{%- if t.title != blank -%}<h3>{{ t.title }}</h3>{%- endif -%}{%- if t.caption != blank -%}<span class='go'>{{ t.caption }}</span>{%- endif -%}</div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+<style>
+.trio{display:grid;grid-template-columns:repeat({{ section.blocks.size }},1fr);gap:4px}
+.trio .tcell{display:block;color:var(--paper);text-decoration:none}
+.trio .media{position:relative;aspect-ratio:3/4;overflow:hidden;background:#111}
+.trio .media img,.trio .media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.trio .media .ph{position:absolute;inset:0;background:#15150f}.trio .media .ph.l{background:#e9e6df}
+.trio .kind{position:absolute;top:12px;left:12px;z-index:2;font:500 10px/1 var(--sans,system-ui);letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);padding:6px 9px;border-radius:2px}
+.trio .cap{padding:14px 2px 0}
+.trio .cap h3{margin:0;font-size:16px;color:var(--ink)}
+.trio .tcell.lt .cap h3{color:var(--ink)}
+.trio .cap .go{display:block;margin-top:3px;font-size:13px;color:var(--ink-2,#6b6b63)}
+@media (max-width:760px){.trio{grid-template-columns:1fr 1fr}.trio .tcell:first-child{grid-column:1 / -1}.trio .tcell:first-child .media{aspect-ratio:16/10}}
+@media (prefers-reduced-motion: reduce){.trio .media video{display:none}}
+</style>
+
+{% schema %}
+{"name":"Media trio","settings":[
+{"type":"text","id":"eyebrow","label":"Small heading","default":"Menswear"},
+{"type":"text","id":"heading","label":"Heading","default":"The Gentleman's Uniform"},
+{"type":"text","id":"link_label","label":"Link label","default":"Shop men"},
+{"type":"url","id":"link","label":"Link"},
+{"type":"select","id":"pt","label":"Top spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"},
+{"type":"select","id":"pb","label":"Bottom spacing","options":[{"value":"normal","label":"Normal"},{"value":"small","label":"Small"},{"value":"none","label":"None"}],"default":"normal"}
+],"blocks":[{"type":"cell","name":"Tile","settings":[
+{"type":"text","id":"kind","label":"Corner tag","info":"e.g. Product, Film, On model"},
+{"type":"image_picker","id":"image","label":"Image (also the video poster)"},
+{"type":"video","id":"video","label":"Video (optional, Shopify upload)"},
+{"type":"text","id":"video_url","label":"…or video link (.mp4)"},
+{"type":"text","id":"title","label":"Title"},
+{"type":"text","id":"caption","label":"Caption"},
+{"type":"url","id":"link","label":"Link"},
+{"type":"select","id":"tone","label":"Text colour","options":[{"value":"dark","label":"Dark text"},{"value":"light","label":"Dark text (alt)"}],"default":"dark"}
+]}],"max_blocks":3,"presets":[{"name":"Media trio","blocks":[{"type":"cell","settings":{"kind":"Product"}},{"type":"cell","settings":{"kind":"Film"}},{"type":"cell","settings":{"kind":"On model"}}]}]}
+{% endschema %}
