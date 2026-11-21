@@ -49,7 +49,9 @@ body.template-index .ua-hd:not(.solid) .ua-logo img{filter:invert(1)}
 /* hero */
 .hero{position:relative;height:min(92vh,860px);min-height:560px;overflow:hidden;color:var(--on)}
 .hero .bg{position:absolute;inset:0}
-.hero .bg img{width:100%;height:100%;object-fit:cover}
+.hero .bg img,
+.hero .bg video,
+.hero .hero-video{width:100%;height:100%;object-fit:cover;display:block}
 .hero .mark{position:absolute;inset:0;display:grid;place-items:center;opacity:.08;color:var(--on)}
 .hero .mark svg{width:120px;height:auto}
 .hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.05) 34%,rgba(0,0,0,.55))}

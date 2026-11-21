@@ -1,13 +1,21 @@
 {%- assign s = section.settings -%}
 <section class='hero h-{{ s.height }} a-{{ s.align }}' style='--ov:{{ s.overlay | divided_by: 100.0 }}'>
   <div class='bg ph'>
-    {%- if s.image -%}
+    {%- if s.video_asset != blank -%}
+      <video class='hero-video' autoplay muted loop playsinline preload='metadata'>
+        <source src='{{ s.video_asset | asset_url }}' type='video/mp4'>
+      </video>
+    {%- elsif s.video -%}
+      {{ s.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, class: 'hero-video' }}
+    {%- elsif s.image -%}
       <picture>
         {%- if s.mobile_image -%}<source media='(max-width: 760px)' srcset='{{ s.mobile_image | image_url: width: 1000 }}'>{%- endif -%}
         {{ s.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '800, 1200, 1800, 2400', alt: s.image.alt }}
       </picture>
     {%- else -%}
-      <div class='mark'>{% render 'ua-mark' %}</div>
+      <video class='hero-video' autoplay muted loop playsinline preload='metadata'>
+        <source src='{{ "hero-background.mp4" | asset_url }}' type='video/mp4'>
+      </video>
     {%- endif -%}
   </div>
   <div class='in'>
@@ -23,7 +31,9 @@
 
 {% schema %}
 {"name":"Hero banner","settings":[
-{"type":"image_picker","id":"image","label":"Image"},
+{"type":"video","id":"video","label":"Background video (Shopify hosted)"},
+{"type":"text","id":"video_asset","label":"Video asset filename","info":"e.g. hero-background.mp4 from assets"},
+{"type":"image_picker","id":"image","label":"Image (fallback if no video)"},
 {"type":"image_picker","id":"mobile_image","label":"Mobile image (optional)"},
 {"type":"text","id":"eyebrow","label":"Small heading","default":"Autumn 2026"},
 {"type":"text","id":"heading","label":"Heading","default":"Considered everyday wear."},
