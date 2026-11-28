@@ -3,45 +3,109 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Urban Attire &middot; Considered Everyday Wear</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0d0d0c">
+  <title>Urban Attire · Considered everyday wear (Preview)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/assets/urban-attire.css">
   <link rel="stylesheet" href="/assets/ua-sections.css">
   <style>
-    .ua-logo{--h:34px;display:inline-flex;align-items:center;gap:0;line-height:1;text-decoration:none;color:inherit}
+    .ua-logo{--h:34px;display:inline-flex;align-items:center;gap:0;line-height:1}
     .ua-logo svg{height:var(--h);width:auto;display:block}
     .ua-logo .dv{width:1px;height:calc(var(--h) * .72);background:currentColor;opacity:.5;margin:0 calc(var(--h) * .215) 0 calc(var(--h) * .225)}
     .ua-logo .wm{display:block;border:0;padding:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;text-transform:uppercase;font-size:calc(var(--h) * .345);line-height:1.39;letter-spacing:.38em;margin-right:-.38em;opacity:1}
+    .ua-ft .ua-logo{--h:44px}
+    @media (max-width:760px){.ua-logo{--h:30px}}
   </style>
+  <script>
+    (function(){
+      var origFetch = window.fetch;
+      window.fetch = function(url, opts) {
+        if (typeof url === 'string' && url.indexOf('cart.js') !== -1) {
+          return Promise.resolve(new Response(JSON.stringify({ item_count: 0, total_price: 0, items: [] }), { status: 200, headers: { 'Content-Type': 'application/json' } }));
+        }
+        return origFetch.apply(this, arguments);
+      };
+    })();
+  </script>
+  <script src="/assets/urban-attire.js" defer></script>
 </head>
 <body class="template-index">
-  <div class="ua-an" style="background:#000;color:#fff;text-align:center;padding:10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase">
-    Complimentary shipping over ₹2,499 &middot; Easy 15-day returns &middot; COD available
+  <a class="vh skip" href="#MainContent">Skip to content</a>
+
+  <div class="ua-ann" data-ann data-speed="5" role="region" aria-label="Announcements">
+    <div class="ann-i on">Complimentary shipping over ₹2,499</div>
+    <div class="ann-i">Easy 15-day returns · COD available</div>
+    <div class="ann-i">Visit us in Lonavala</div>
   </div>
+  <script>
+    (function(){
+      document.querySelectorAll('[data-ann]').forEach(function(bar){
+        if(bar.dataset.init)return;bar.dataset.init='1';
+        var items=bar.querySelectorAll('.ann-i'),i=0,ms=(parseInt(bar.dataset.speed,10)||5)*1000;
+        if(items.length<2)return;
+        function show(n){items[i].classList.remove('on');i=n;items[i].classList.add('on')}
+        if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){setInterval(function(){show((i+1)%items.length)},ms)}
+      });
+    })();
+  </script>
 
   <header class="ua-hd">
     <div class="s l">
-      <button type="button" class="ua-nav" aria-label="Open menu"><span class="ua-bars"><i></i><i></i><i></i></span><span class="dk">Menu</span></button>
+      <button type="button" class="ua-nav" data-open-menu aria-label="Open menu"><span class="ua-bars"><i></i><i></i><i></i></span><span class="dk">Menu</span></button>
       <a class="ua-nav dk" href="#men">Men</a>
       <a class="ua-nav dk" href="#kids">Kids</a>
       <a class="ua-nav dk" href="#new">New Arrivals</a>
     </div>
-    <a class="ua-logo" href="/" aria-label="Urban Attire">
-      <svg viewBox="0 0 91 100" fill="currentColor" aria-hidden="true" style="overflow:visible;height:34px"><path fill-rule="evenodd" d="M51 98C73 95 90 73 89 47C89 33 84 19 74 6C70 1 70 1 65 7C58 16 55 23 56 33C57 39 59 44 65 58C69 68 69 68 65 70C57 74 52 78 48 85C45 88 45 88 43 84C39 78 34 74 26 70C21 68 21 68 27 56C28 54 29 52 29 51C29 51 29 51 30 50C30 49 31 47 32 44C37 29 35 18 25 6C21 1 21 1 18 5C-2 31 -3 64 15 85C16 86 17 87 17 87C18 88 19 88 19 89C27 96 39 99 51 98ZM38 92C36 92 34 91 29 89C24 87 18 81 14 75C11 70 11 70 19 72C26 75 26 75 29 78C34 81 34 81 38 86C40 88 41 92 40 92C40 92 40 92 38 92ZM51 92C49 91 54 84 59 80C62 77 67 75 69 74C70 74 71 73 71 73C72 73 73 72 73 72C74 72 75 71 76 71C79 70 79 71 77 74C73 81 68 86 62 89C58 91 52 93 51 92ZM15 65C5 59 4 40 15 20C20 10 21 9 25 14C32 25 31 34 21 56C20 58 19 62 18 63C17 66 17 66 15 65ZM74 65C73 65 73 64 73 63C72 62 70 57 69 54C68 53 68 52 68 51C67 51 67 50 67 49C66 48 65 45 64 43C61 33 61 24 65 17C68 11 70 10 71 11C76 16 81 29 83 40C85 47 84 55 82 59C80 63 75 67 74 65Z"/></svg>
+    <a class="ua-logo" href="/" aria-label="Urban Attire — home">
+      <svg viewBox="0 0 91 100" fill="currentColor" aria-hidden="true" focusable="false" style="overflow:visible"><path fill-rule="evenodd" d="M51 98C73 95 90 73 89 47C89 33 84 19 74 6C70 1 70 1 65 7C58 16 55 23 56 33C57 39 59 44 65 58C69 68 69 68 65 70C57 74 52 78 48 85C45 88 45 88 43 84C39 78 34 74 26 70C21 68 21 68 27 56C28 54 29 52 29 51C29 51 29 51 30 50C30 49 31 47 32 44C37 29 35 18 25 6C21 1 21 1 18 5C-2 31 -3 64 15 85C16 86 17 87 17 87C18 88 19 88 19 89C27 96 39 99 51 98ZM38 92C36 92 34 91 29 89C24 87 18 81 14 75C11 70 11 70 19 72C26 75 26 75 29 78C34 81 34 81 38 86C40 88 41 92 40 92C40 92 40 92 38 92ZM51 92C49 91 54 84 59 80C62 77 67 75 69 74C70 74 71 73 71 73C72 73 73 72 73 72C74 72 75 71 76 71C79 70 79 71 77 74C73 81 68 86 62 89C58 91 52 93 51 92ZM15 65C5 59 4 40 15 20C20 10 21 9 25 14C32 25 31 34 21 56C20 58 19 62 18 63C17 66 17 66 15 65ZM74 65C73 65 73 64 73 63C72 62 70 57 69 54C68 53 68 52 68 51C67 51 67 50 67 49C66 48 65 45 64 43C61 33 61 24 65 17C68 11 70 10 71 11C76 16 81 29 83 40C85 47 84 55 82 59C80 63 75 67 74 65Z"/></svg>
       <span class="dv" aria-hidden="true"></span>
       <span class="wm">Urban<br>Attire</span>
     </a>
     <div class="s r">
-      <a class="ua-nav dk" href="#search">Search</a>
-      <a class="ua-nav dk" href="#account">Account</a>
-      <a class="ua-nav" href="#cart">Bag (0)</a>
+      <a class="ua-nav dk" href="#new">Search</a>
+      <a class="ua-nav dk" href="#story">Account</a>
+      <a class="ua-nav" href="#cart" data-open-cart>Bag (<span data-cart-count>0</span>)</a>
     </div>
   </header>
 
-  <main id="MainContent">
-    <section class="hero h-full a-left" style="--ov:0.45; height: 100vh; position: relative;">
+  <div class="ua-menu" data-ua-menu aria-hidden="true" role="dialog" aria-label="Menu">
+    <div class="top"><span class="bl">Urban Attire</span><button type="button" class="ua-nav" data-close-menu>Close ✕</button></div>
+    <div class="bd">
+      <div class="col">
+        <h4>Men</h4>
+        <ul>
+          <li><a href="#men" data-close-menu>All Men</a></li>
+          <li><a href="#collections" data-close-menu>Shirts</a></li>
+          <li><a href="#collections" data-close-menu>T-Shirts</a></li>
+          <li><a href="#collections" data-close-menu>Polos</a></li>
+          <li><a href="#new" data-close-menu>New Arrivals</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Kids</h4>
+        <ul>
+          <li><a href="#kids" data-close-menu>All Kids</a></li>
+          <li><a href="#collections" data-close-menu>Boys</a></li>
+          <li><a href="#collections" data-close-menu>Girls</a></li>
+          <li><a href="#collections" data-close-menu>Sets</a></li>
+        </ul>
+      </div>
+      <div class="col feat">
+        <div>
+          <div class="e">Autumn 2026</div>
+          <h3>The Weekly Edit</h3>
+          <a class="lk" href="#edit" data-close-menu>Shop the edit →</a>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><a href="#new" data-close-menu>Search</a><a href="#story" data-close-menu>Account</a><a href="#cart" data-close-menu>Bag</a><span>Lonavala — 3 Stores</span></div>
+  </div>
+
+  <main id="MainContent" role="main" tabindex="-1">
+    <section class="hero h-full a-left" style="--ov:0.45">
       <div class="bg ph">
         <video class="hero-video" autoplay muted loop playsinline preload="metadata">
           <source src="/assets/hero-background.mp4" type="video/mp4">
@@ -50,7 +114,6 @@
       <div class="in">
         <div class="ey">Autumn 2026</div>
         <h1>Considered everyday wear.</h1>
-        <p class="sub"></p>
         <div class="bs">
           <a class="btn light solid" href="#men">Shop Men</a>
           <a class="btn light" href="#kids">Shop Kids</a>
@@ -58,12 +121,116 @@
       </div>
     </section>
 
-    <section class="trust" style="padding: 40px 20px; display: flex; justify-content: space-around; background: #fff; text-align: center; border-bottom: 1px solid #eee;">
-      <div>Honest pricing</div>
-      <div>Free shipping over ₹2,499</div>
-      <div>15-day returns</div>
-      <div>COD available</div>
+    <div class="trust">
+      <span>Honest pricing</span>
+      <span>Free shipping over ₹2,499</span>
+      <span>15-day returns</span>
+      <span>COD available</span>
+    </div>
+
+    <section id="men" class="split cols-2 h-tall" aria-label="Shop by department">
+      <a class="tile" href="#collections">
+        <div class="ph"></div>
+        <div class="cap"><h3>Men</h3><span class="go">Shirts, tees &amp; polos →</span></div>
+      </a>
+      <a id="kids" class="tile lt" href="#collections">
+        <div class="ph l"></div>
+        <div class="cap"><h3>Kids</h3><span class="go">For the little ones →</span></div>
+      </a>
+    </section>
+
+    <section id="collections" class="sec pt-normal pb-none">
+      <div class="sh">
+        <div><div class="ey2">Shop by category</div><h2>The collections</h2></div>
+        <a class="lk" href="#new">View all</a>
+      </div>
+      <div class="tiles" style="--c:3">
+        <a class="tile" href="#new">
+          <div class="ph"></div>
+          <div class="cap"><h3>Shirts</h3><span class="go">Men</span></div>
+        </a>
+        <a class="tile lt" href="#new">
+          <div class="ph l"></div>
+          <div class="cap"><h3>T-Shirts</h3><span class="go">Men</span></div>
+        </a>
+        <a class="tile" href="#new">
+          <div class="ph"></div>
+          <div class="cap"><h3>Kidswear</h3><span class="go">Boys &amp; Girls</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="new" class="sec pt-normal pb-normal">
+      <div class="sh">
+        <div><div class="ey2">Just landed</div><h2>New arrivals</h2></div>
+        <a class="lk" href="#collections">Shop all new</a>
+      </div>
+      <div class="rail">
+        <a class="card" href="#new"><div class="im"><span class="flag">New</span><span class="t">Shopify catalog item</span></div><div class="nm">Relaxed Linen Shirt</div><div class="mt">Shirts</div><div class="pr tnum">₹2,299</div></a>
+        <a class="card" href="#new"><div class="im"><span class="flag">New</span><span class="t">Shopify catalog item</span></div><div class="nm">Heavyweight Crew Tee</div><div class="mt">T-Shirts</div><div class="pr tnum">₹1,199</div></a>
+        <a class="card" href="#new"><div class="im"><span class="t">Shopify catalog item</span></div><div class="nm">Knit Collar Polo</div><div class="mt">Polos</div><div class="pr tnum">₹1,799</div></a>
+        <a class="card" href="#new"><div class="im"><span class="t">Shopify catalog item</span></div><div class="nm">Kids Everyday Set</div><div class="mt">Kidswear</div><div class="pr tnum">₹1,499</div></a>
+      </div>
+    </section>
+
+    <section id="edit" class="edi">
+      <div class="vis ph"></div>
+      <div class="tx">
+        <div class="ey2">The Weekly Edit</div>
+        <h2>New in, every week.</h2>
+        <div class="rte"><p>A tight, rotating selection of what we are wearing now — soft-washed shirts, heavyweight tees, and kidswear built to be lived in.</p></div>
+        <a class="btn dark" href="#new">Shop the edit</a>
+      </div>
+    </section>
+
+    <section id="story" class="story">
+      <div class="ey2">Our story</div>
+      <p>One standard — well-made everyday clothing for men and the kids who copy them.</p>
+      <div class="mt">
+        <div><div class="n">3</div><div class="l">Stores in Lonavala</div></div>
+        <div><div class="n">India</div><div class="l">Now shipping</div></div>
+      </div>
+    </section>
+
+    <section class="news">
+      <h2>Join the list</h2>
+      <p>Early access to new drops, in-store events in Lonavala, and the occasional member-only offer.</p>
+      <form class="f" onsubmit="event.preventDefault();this.innerHTML='<p class=msg role=status>Thank you — preview signup captured.</p>';">
+        <label class="vh" for="ua-email-preview">Email address</label>
+        <input id="ua-email-preview" type="email" placeholder="Email address" autocomplete="email" required>
+        <button type="submit">Subscribe</button>
+      </form>
     </section>
   </main>
+
+  <footer class="ua-ft">
+    <div class="row">
+      <div>
+        <a class="ua-logo" href="/" aria-label="Urban Attire">
+          <svg viewBox="0 0 91 100" fill="currentColor" aria-hidden="true" focusable="false" style="overflow:visible"><path fill-rule="evenodd" d="M51 98C73 95 90 73 89 47C89 33 84 19 74 6C70 1 70 1 65 7C58 16 55 23 56 33C57 39 59 44 65 58C69 68 69 68 65 70C57 74 52 78 48 85C45 88 45 88 43 84C39 78 34 74 26 70C21 68 21 68 27 56C28 54 29 52 29 51C29 51 29 51 30 50C30 49 31 47 32 44C37 29 35 18 25 6C21 1 21 1 18 5C-2 31 -3 64 15 85C16 86 17 87 17 87C18 88 19 88 19 89C27 96 39 99 51 98ZM38 92C36 92 34 91 29 89C24 87 18 81 14 75C11 70 11 70 19 72C26 75 26 75 29 78C34 81 34 81 38 86C40 88 41 92 40 92C40 92 40 92 38 92ZM51 92C49 91 54 84 59 80C62 77 67 75 69 74C70 74 71 73 71 73C72 73 73 72 73 72C74 72 75 71 76 71C79 70 79 71 77 74C73 81 68 86 62 89C58 91 52 93 51 92ZM15 65C5 59 4 40 15 20C20 10 21 9 25 14C32 25 31 34 21 56C20 58 19 62 18 63C17 66 17 66 15 65ZM74 65C73 65 73 64 73 63C72 62 70 57 69 54C68 53 68 52 68 51C67 51 67 50 67 49C66 48 65 45 64 43C61 33 61 24 65 17C68 11 70 10 71 11C76 16 81 29 83 40C85 47 84 55 82 59C80 63 75 67 74 65Z"/></svg>
+          <span class="dv" aria-hidden="true"></span>
+          <span class="wm">Urban<br>Attire</span>
+        </a>
+        <p>Considered menswear and kidswear, made and sold in Lonavala. Now shipping across India.</p>
+      </div>
+      <div><h5>Shop</h5><ul><li><a href="#men">Men</a></li><li><a href="#kids">Kids</a></li><li><a href="#new">New Arrivals</a></li></ul></div>
+      <div><h5>Help</h5><ul><li><a href="#cart" data-open-cart>Bag</a></li><li><a href="#story">Account &amp; orders</a></li><li><a href="#new">Search</a></li></ul></div>
+      <div><h5>Visit</h5><ul><li>Three stores in Lonavala</li><li>Open daily</li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 Urban Attire</span><span>Lonavala, Maharashtra · India</span><span>Secure checkout · UPI · Cards · COD</span></div>
+  </footer>
+
+  <div class="ua-scrim" data-ua-scrim></div>
+  <aside class="ua-drawer" data-ua-drawer data-free="249900" aria-hidden="true" role="dialog" aria-label="Your bag">
+    <div class="dh"><span>Your bag</span><button type="button" class="x" data-close-cart aria-label="Close bag">✕</button></div>
+    <div data-cart-items><p class="dempty">Your bag is empty (Shopify cart requires live store).</p></div>
+    <div data-cart-go hidden>
+      <div class="prog"><div data-cart-progress></div><div class="bar"><i data-cart-bar></i></div></div>
+      <div class="sum"><span class="s">Subtotal</span><span class="v tnum" data-cart-subtotal>₹0</span></div>
+      <div class="note">Shipping and taxes calculated at checkout.</div>
+    </div>
+    <button type="button" class="cont" data-close-cart>Continue shopping</button>
+    <div class="pay"><b>UPI</b><b>Visa</b><b>Mastercard</b><b>RuPay</b><b>COD</b></div>
+  </aside>
 </body>
 </html>
